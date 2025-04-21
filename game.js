@@ -26,12 +26,11 @@ canvas.height = 800;
 
 // --- 3) 상수 정의 ---
 // 화면 크기에 따른 상대적 크기 계산
-const PLAYER_SIZE   = canvas.width * 0.18;  // 화면 너비의 18%로 증가 (기존 13%)
+const PLAYER_SIZE   = canvas.width * 0.20;  // 화면 너비의 13%
 const ENEMY_SIZE    = canvas.width * 0.10;  // 화면 너비의 10%
 const ITEM_SIZE     = canvas.width * 0.09;  // 화면 너비의 9%
-// 미사일 크기 증가
-const MISSILE_WIDTH = canvas.width * 0.03;   // 미사일 너비 증가
-const MISSILE_HEIGHT = canvas.width * 0.06;  // 미사일 높이 증가
+const MISSILE_WIDTH = canvas.width * 0.02;  // 미사일 너비
+const MISSILE_HEIGHT = canvas.width * 0.04; // 미사일 높이
 const ITEM_INTERVAL = 10000; // 10초마다 아이템
 const BASE_SHOT_INT = 500;   // 자동 발사 기본 간격(ms)
 const SPEED_FACTOR  = 0.02;  // 적 속도 증가 비율 (초당)
@@ -123,14 +122,8 @@ class Missile {
     this.x += Math.sin(this.ang) * (canvas.width * 0.006);
   }
   draw() {
-    // 미사일 디자인 개선
-    ctx.fillStyle = "#ff4444";  // 밝은 빨간색
+    ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
-    // 미사일 발광 효과
-    ctx.shadowColor = "#ff0000";
-    ctx.shadowBlur = 10;
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-    ctx.shadowBlur = 0;
   }
 }
 
@@ -216,32 +209,20 @@ function drawBackground() {
   drawImage(IMG.bg, 0, 0, canvas.width, canvas.height);
 }
 function drawUI() {
-  const barWidth = canvas.width * 0.6;     // 게이지 너비 증가
-  const barHeight = canvas.height * 0.035;  // 게이지 높이 증가
+  const barWidth = canvas.width * 0.4;
+  const barHeight = canvas.height * 0.025;
   const margin = canvas.width * 0.05;
   
-  // 게이지 배경
-  ctx.fillStyle = "rgba(0,0,0,0.5)";
-  ctx.fillRect(margin-2, margin-2, barWidth+4, barHeight+4);
-  
-  // 게이지 테두리
-  ctx.fillStyle = "#444444";
+  ctx.fillStyle = "gray";
   ctx.fillRect(margin, margin, barWidth, barHeight);
-  
-  // 게이지 내부
-  const gradient = ctx.createLinearGradient(margin, margin, margin + barWidth, margin);
-  gradient.addColorStop(0, "#22ff22");
-  gradient.addColorStop(1, "#44ff44");
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = "limegreen";
   ctx.fillRect(margin, margin, (playerEnergy/100) * barWidth, barHeight);
-  
-  // 점수 표시
-  ctx.font = `bold ${canvas.width * 0.06}px Arial`;  // 폰트 크기 증가
-  ctx.fillStyle = "white";
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
+  ctx.strokeRect(margin, margin, barWidth, barHeight);
+  
+  ctx.font = `${canvas.width * 0.05}px Arial`;
+  ctx.fillStyle = "white";
   ctx.textAlign = "right";
-  ctx.strokeText("점수: " + score, canvas.width - margin, margin * 2);
   ctx.fillText("점수: " + score, canvas.width - margin, margin * 2);
 }
 
